@@ -37,7 +37,7 @@
 
     @media screen and (max-width: 768px) {
         #logo{
-            z-index: none;
+            z-index: 0;
         }    
     }
 
