@@ -60,3 +60,10 @@ const login = (e) => {
 
 registerForm.addEventListener('submit', signup);
 loginForm.addEventListener('submit', login);
+
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const uid = user.uid;
+    window.location.replace("analytics_en.html")
+  } else{}
+});
