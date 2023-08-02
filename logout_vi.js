@@ -6,6 +6,6 @@ const logoutBtn = document.querySelector(".logout");
 
 logoutBtn.addEventListener("click", () => {
   auth.signOut().then(() => {
-    window.location.replace("login_in.html");
+    window.location.replace("login_vi.html");
   });
 });
