@@ -14,8 +14,6 @@ const firebaseConfig = {
     measurementId: "G-L2BHB77QF5"
 };
 
-const logregBox = document.querySelector('.logreg-box');
-
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const auth = getAuth(app);
@@ -23,47 +21,58 @@ const auth = getAuth(app);
 const registerForm = document.querySelector('.register form');
 const loginForm = document.querySelector('.login form');
 
-const signup = (e) => {
+const checkLoggedIn = () => {
+    return new Promise((resolve, reject) => {
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        });
+    });
+};
+
+const signup = async (e) => {
     e.preventDefault();
     const iddevice = document.getElementById("iddevice").value;
     const email_reg = document.getElementById("email_reg").value;
     const pass_reg = document.getElementById("pass_reg").value;
-  
-    createUserWithEmailAndPassword(auth, email_reg, pass_reg)
-        .then((userCredential) => {
-            const userEmail = userCredential.user.email;
-            const encodedEmail = encodeURIComponent(userEmail.replace(/[.@]/g, '_'));
-            console.log("iddevice: ", iddevice);
-            console.log("encodedEmail: ", encodedEmail);
-            alert("Đăng ký thành công");
-            set(ref(db, `${encodedEmail}`), iddevice);
-            logregBox.classList.remove('active');
 
-        })
-        .catch((error) => {
-            alert("Đăng ký thất bại: " + error.message);
-        });
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email_reg, pass_reg);
+        const user = userCredential.user;
+        alert("Sign up successful");
+        const encodedEmail = encodeURIComponent(email_reg.replace(/[.@]/g, '_'));
+        await set(ref(db, `${encodedEmail}`), iddevice);
+        console.log("Lưu thông tin đăng ký vào Firebase thành công");
+
+        if (await checkLoggedIn()) {
+            window.location.replace("login_en.html");
+        }
+    } catch (error) {
+        alert("Sign up failed: " + error.message);
+    }
 };
 
-const login = (e) => {
+const login = async (e) => {
     e.preventDefault();
     const email_sig = document.getElementById("email_sig").value;
     const pass_sig = document.getElementById("pass_sig").value;
-    signInWithEmailAndPassword(auth, email_sig, pass_sig)
-        .then((userCredential) => {
-            window.location.href = "analytics_en.html";
-        })
-        .catch((error) => {
-            alert("Đăng nhập thất bại: " + error.message);
-        });
+
+    try {
+        await signInWithEmailAndPassword(auth, email_sig, pass_sig);
+        window.location.replace("analytics_en.html");
+    } catch (error) {
+        alert("Sign in failed: " + error.message);
+    }
 };
+
+checkLoggedIn().then((isLoggedIn) => {
+    if (isLoggedIn) {
+        window.location.replace("analytics_en.html");
+    }
+});
 
 registerForm.addEventListener('submit', signup);
 loginForm.addEventListener('submit', login);
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    const uid = user.uid;
-    window.location.replace("analytics_en.html")
-  } else{}
-});
