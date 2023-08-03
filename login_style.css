@@ -285,13 +285,31 @@ body{
 @media (max-width: 700px) {
     .header{
         position: absolute;
+        width: 90%;
+        padding: 40px 40px;
+        background: transparent;
+        display: inline-block;
+        z-index: 2;
+        
+    }
+
+    .navbar{
+        list-style: none;
+        margin-right: 10px;
+    }
+
+    .background{
+        background: url('img/baner_hcm.jpg') no-repeat;
+        filter: blur(20px);
+    }
+    .container{
+        background: none;
+        backdrop-filter: blur(0);
     }
 
     .container .content{
         display: none;
     }
-
-    
     .container .logreg-box{
         position: absolute;
         top: 0;
