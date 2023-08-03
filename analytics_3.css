@@ -52,6 +52,7 @@ body{
     height: 100vh;
     font-family: 'Poppins', sans-serif;
     font-size: 0.88rem;
+    -webkit-user-select: none;
     user-select: none;
     overflow-x: hidden;
     color: var(--color-dark);
@@ -601,7 +602,7 @@ main .recent-checkin a{
     font-size: 18px;
 }
 
-.right-section .search button img{
+/*.right-section .search button img{
     width: 16px;
     margin-left: 10px;
 } */
