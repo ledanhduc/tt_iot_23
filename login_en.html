@@ -63,7 +63,8 @@
 
                     <div class="input-box">
                         <span class="icon"><i class="fa-solid fa-lock"></i></span>
-                        <input type="password" required id="pass_sig">
+                        <!-- <input type="password" required id="pass_sig"> -->
+                        <input type="password" autocomplete="current-password" required id="pass_sig">
                         <label>Password</label>
                     </div>
                
@@ -86,7 +87,7 @@
 
                     <div class="input-box">
                         <span class="icon"><i class="fa-solid fa-arrow-down-9-1"></i></span>
-                        <input type="number" required id="iddevice">
+                        <input type="number" required id="iddevice" inputmode="numeric">
                         <label>ID Device</label>
                     </div>
 
@@ -98,12 +99,12 @@
 
                     <div class="input-box">
                         <span class="icon"><i class="fa-solid fa-lock"></i></span>
-                        <input type="password" required id="pass_reg">
+                        <input type="password" autocomplete="current-password" required id="pass_reg">
                         <label>Password</label>
                     </div>
                
                     <div class="remember-forgot">
-                        <label><input type="checkbox">I agree to the terms & conditions</label>
+                        <label><input type="checkbox" required>I agree to the terms & conditions</label>
                     </div>
 
                     <button value="submit" id="sinupinp" class="btn">Sign Up</button>
