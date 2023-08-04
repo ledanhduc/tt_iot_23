@@ -8,13 +8,13 @@
     --color-warning: #F7D060;
     --color-white: #fff;
     --color-info-dark: #7d8da1;
-    /* --color-dark: #363949; */
     --color-dark: #000;
     --color-dark_1: #000;
     --color-light: rgba(132, 139, 200, 0.18);
     --color-dark-variant: #677483;
     --color-background: #f6f6f9;
-
+    --color-gardient: linear-gradient(135deg, #00feba, #5b548a);
+    
     --card-border-radius: 2rem;
     --border-radius-1: 0.4rem;
     --border-radius-2: 1.2rem;
@@ -32,6 +32,7 @@
     --color-dark-variant: #a3bdcc;
     --color-light: rgba(0, 0, 0, 0.4);
     --box-shadow: 0 2rem 3rem var(--color-light);
+    --color-gardient: linear-gradient(135deg, #665bab, #118d558b);
 }
 
 *{
@@ -53,6 +54,7 @@ body{
     height: 100vh;
     font-family: 'Poppins', sans-serif;
     font-size: 0.88rem;
+    -webkit-user-select: none;
     user-select: none;
     overflow-x: hidden;
     color: var(--color-dark);
@@ -470,31 +472,21 @@ main .recent-checkin a{
 }
 
 .right-section .weather-in4{
-    /* display: flexbox; */
-    /* justify-content: flex-start; */
+    display: flexbox;
+    justify-content: flex-start;
     text-align: center;
     margin-top: 1rem;
-    /* background-color: var(--color-white); */
-    background: linear-gradient(135deg, #00feba, #5b548a);
+    background: var(--color-gardient);
     padding: var(--card-padding);
     border-radius: var(--card-border-radius);
     box-shadow: var(--box-shadow);
     cursor: pointer;
-    /* transition: all 0.3s ease; */
+    transition: all 0.3s ease;
+}
+.right-section .weather-in4:hover{
+    box-shadow: none;
 }
 
-.right-section .search{
-    width: 4rem;
-    margin-left: 2px;
-    height: auto;
-    margin-bottom: 0.8rem;
-    border-radius: 50%;
-    /* justify-content: space-between;  */
-    /* align-items: self-end; */
-    /* display: inline-block; */
-    /* display: inline; */
-    
-}
 
 .right-section .search input{
     border: 0;
@@ -508,26 +500,15 @@ main .recent-checkin a{
     margin-right: 16px;
     font-size: 18px;
 }
-/* .right-section .search button{
-    border: 0;
-    outline: 0;
-    background: #ebfffc;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-    margin-left: 250px;
-}
 
-.right-section .search button img{
-    width: 16px;
-    margin-left: 10px;
-} */
+
 .right-section .weather-icon{
     width: 150px;
-    margin-top: 10px;
-    /* text-align: center; */
-    margin-left: 60px;
+    height: 150px;
+    margin-top: -10px;
+    text-align: center;
+    text-align: center;
+    display: inline-block;
 }
 .right-section .weather h1{
     font-size: 80px;
@@ -551,24 +532,19 @@ main .recent-checkin a{
 .right-section .col{
     display: flex;
     align-items: center;
-    text-align: left;
     margin-right: 20px;
 }
 .right-section .col p{
-        color: var(--color-dark);
+    color: var(--color-dark);
+    transform: translate(40px);
 }
 
 .right-section .col img{
     width: 40px;
-    margin-right: 10px;
+    margin-left: -10px;
+    position: absolute;
 }
-.right-section .Humidity, .wind{
-    font-size: 28px;
-    margin-top: -6px;
-}
-.right-section .weather{
-    display: none;
-}
+
 .error{
     text-align: left;
     margin-left: 10px;
