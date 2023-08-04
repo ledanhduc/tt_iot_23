@@ -1,4 +1,3 @@
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
 import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
@@ -14,8 +13,6 @@ const firebaseConfig = {
     measurementId: "G-L2BHB77QF5"
 };
 
-const logregBox = document.querySelector('.logreg-box');
-
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const auth = getAuth(app);
@@ -23,47 +20,87 @@ const auth = getAuth(app);
 const registerForm = document.querySelector('.register form');
 const loginForm = document.querySelector('.login form');
 
-const signup = (e) => {
+const checkLoggedIn = () => {
+    return new Promise((resolve, reject) => {
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        });
+    });
+};
+
+const checkbox = document.getElementById('rmb_ac');
+let userCredential; // Khai báo biến ở mức độ cao hơn.
+
+const signup = async (e) => {
     e.preventDefault();
     const iddevice = document.getElementById("iddevice").value;
     const email_reg = document.getElementById("email_reg").value;
     const pass_reg = document.getElementById("pass_reg").value;
-  
-    createUserWithEmailAndPassword(auth, email_reg, pass_reg)
-        .then((userCredential) => {
-            const userEmail = userCredential.user.email;
-            const encodedEmail = encodeURIComponent(userEmail.replace(/[.@]/g, '_'));
-            console.log("iddevice: ", iddevice);
-            console.log("encodedEmail: ", encodedEmail);
-            alert("Đăng ký thành công");
-            set(ref(db, `${encodedEmail}`), iddevice);
-            logregBox.classList.remove('active');
 
-        })
-        .catch((error) => {
-            alert("Đăng ký thất bại: " + error.message);
-        });
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email_reg, pass_reg);
+        const user = userCredential.user;
+        alert("Đăng ký thành công");
+        const encodedEmail = encodeURIComponent(email_reg.replace(/[.@]/g, '_'));
+        await set(ref(db, `${encodedEmail}`), iddevice);
+        // console.log("Lưu thông tin đăng ký vào Firebase thành công");
+
+        if (await checkLoggedIn()) {
+            window.location.replace("login_en.html");
+        }
+    } catch (error) {
+        alert("Đăng ký thất bại: " + error.message);
+    }
 };
 
-const login = (e) => {
+const login = async (e) => {
     e.preventDefault();
     const email_sig = document.getElementById("email_sig").value;
     const pass_sig = document.getElementById("pass_sig").value;
-    signInWithEmailAndPassword(auth, email_sig, pass_sig)
-        .then((userCredential) => {
-            window.location.href = "analytics_vi.html";
-        })
-        .catch((error) => {
-            alert("Đăng nhập thất bại: " + error.message);
-        });
+
+    try {
+        userCredential = await signInWithEmailAndPassword(auth, email_sig, pass_sig); // Gán giá trị cho biến userCredential.
+        await signInWithEmailAndPassword(auth, email_sig, pass_sig);
+        if (checkbox.checked) {
+        localStorage.setItem('user', JSON.stringify(userCredential.user));
+        } else {
+            localStorage.clear();
+        }
+        window.location.replace("analytics_en.html");
+    } catch (error) {
+        alert("Đăng ký thất bại: " + error.message);
+    }
 };
+
+checkLoggedIn().then((isLoggedIn) => {
+    if (isLoggedIn) {
+        window.location.replace("analytics_en.html");
+    }
+});
+
+const user = JSON.parse(localStorage.getItem('user'));
+
+if (user) {
+  try {
+    auth.signInWithEmailAndPassword(user.email, user.password)
+  }
+  catch(error){
+      console.error(error);
+    };
+}
+
+if (user === null) {
+    try {
+        auth.signOut();
+    }
+    catch(error){
+        console.error(error);
+      };
+  }
 
 registerForm.addEventListener('submit', signup);
 loginForm.addEventListener('submit', login);
-
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    const uid = user.uid;
-    window.location.replace("analytics_en.html")
-  } else{}
-});
