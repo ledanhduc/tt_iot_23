@@ -47,7 +47,7 @@ const signup = async (e) => {
         await set(ref(db, `${encodedEmail}`), iddevice);
 
         if (await checkLoggedIn()) {
-            window.location.replace("login_in.html");
+            window.location.replace("login_vi.html");
         }
     } catch (error) {
         alert("Đăng ký thất bại: " + error.message);
