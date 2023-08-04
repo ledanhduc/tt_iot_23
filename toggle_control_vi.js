@@ -1,7 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
 import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
-
 
 const firebaseConfig = {
   apiKey: "AIzaSyB7WrNTgddUG1kUWpJEvi2wQ1rkZ7qPWzw",
@@ -100,14 +98,3 @@ airConditioners_fb.forEach(function(ac) {
     }
   });
 });
-
-const auth = getAuth();
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    const uid = user.uid;
-    
-  } else {
-    window.location.replace("login_vi.html")
-  }
-});
-
