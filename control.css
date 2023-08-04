@@ -33,6 +33,7 @@
     --color-light: rgba(0, 0, 0, 0.4);
     --box-shadow: 0 2rem 3rem var(--color-light);
     --color-gardient: linear-gradient(135deg, #665bab, #118d558b);
+
 }
 
 *{
@@ -269,6 +270,7 @@ main .analyse h1{
     margin-left: 10px;
 }
 
+
 main .analyse .img_air{
     margin-top: 2px;
     width: 30px;
@@ -276,15 +278,12 @@ main .analyse .img_air{
     margin-left: 10px;
 }
 
-
-
 main .analyse .progresss{
 position: relative;
 width: 84px;
 height: 84px;
-
+/* background: #000; */
 }
-
 
 main .analyse .progresss .toggle{
 position: absolute;
@@ -483,10 +482,10 @@ main .recent-checkin a{
     cursor: pointer;
     transition: all 0.3s ease;
 }
+
 .right-section .weather-in4:hover{
     box-shadow: none;
 }
-
 
 .right-section .search input{
     border: 0;
@@ -495,13 +494,12 @@ main .recent-checkin a{
     color: #555;
     padding: 10px 25px;
     height: 60px;
+    width: 100%;
     border-radius: 30px;
     flex: 1;
-    margin-right: 16px;
+
     font-size: 18px;
 }
-
-
 .right-section .weather-icon{
     width: 150px;
     height: 150px;
@@ -510,6 +508,7 @@ main .recent-checkin a{
     text-align: center;
     display: inline-block;
 }
+
 .right-section .weather h1{
     font-size: 80px;
     font-weight: 500;
@@ -520,7 +519,6 @@ main .recent-checkin a{
     font-size: 45px;
     font-weight: 400;
     margin-top: -10px; 
-    /* color: #181a1e; */
 }
 .right-section .details{
     display: flex;
