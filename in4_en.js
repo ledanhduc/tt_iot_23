@@ -56,14 +56,14 @@ onAuthStateChanged(auth, (user) => {
 });
 
 var userRead =  sessionStorage.getItem('userses') || localStorage.getItem('user');
-// if (userRead === null) {
-//     try {
-//         auth.signOut();
-//     }
-//     catch(error){
-//         console.error(error);
-//       };
-// }
+if (userRead === null) {
+    try {
+        auth.signOut();
+    }
+    catch(error){
+        console.error(error);
+      };
+}
 
 
 
