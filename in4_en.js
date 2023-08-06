@@ -55,7 +55,7 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-var userRead = localStorage.getItem('user');
+var userRead =  sessionStorage.getItem('userses') || localStorage.getItem('user');
 if (userRead === null) {
     try {
         auth.signOut();
