@@ -68,6 +68,7 @@ const login = async (e) => {
         await signInWithEmailAndPassword(auth, email_sig, pass_sig);
         if (checkbox.checked) {
         localStorage.setItem('user', JSON.stringify(userCredential.user));
+        sessionStorage.setItem('userses', JSON.stringify(userCredential.user));
         } else {
             localStorage.clear();
         }
