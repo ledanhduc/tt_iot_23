@@ -43,7 +43,7 @@ const signup = async (e) => {
     // console.log("Lưu thông tin đăng ký vào Firebase thành công");
 
     if (await checkLoggedIn()) {
-      window.location.replace("login_en.html");
+      window.location.replace("login_vi.html");
     }
   } catch (error) {
     alert("Đăng ký thất bại: " + error.message);
@@ -62,7 +62,7 @@ const login = async (e) => {
     } else {
       localStorage.clear();
     }
-    window.location.replace("analytics_en.html");
+    window.location.replace("analytics_vi.html");
   } catch (error) {
     alert("Đăng nhập thất bại: " + error.message);
   }
@@ -70,7 +70,7 @@ const login = async (e) => {
 
 checkLoggedIn().then((isLoggedIn) => {
   if (isLoggedIn) {
-    window.location.replace("analytics_en.html");
+    window.location.replace("analytics_vi.html");
   }
 });
 
