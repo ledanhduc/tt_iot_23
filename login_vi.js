@@ -1,4 +1,3 @@
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
 import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
@@ -33,6 +32,9 @@ const checkLoggedIn = () => {
     });
 };
 
+const checkbox = document.getElementById('rmb_ac');
+let userCredential; 
+
 const signup = async (e) => {
     e.preventDefault();
     const iddevice = document.getElementById("iddevice").value;
@@ -45,9 +47,8 @@ const signup = async (e) => {
         alert("Đăng ký thành công");
         const encodedEmail = encodeURIComponent(email_reg.replace(/[.@]/g, '_'));
         await set(ref(db, `${encodedEmail}`), iddevice);
-
         if (await checkLoggedIn()) {
-            window.location.replace("login_vi.html");
+            window.location.replace("login_en.html");
         }
     } catch (error) {
         alert("Đăng ký thất bại: " + error.message);
@@ -60,18 +61,44 @@ const login = async (e) => {
     const pass_sig = document.getElementById("pass_sig").value;
 
     try {
+        userCredential = await signInWithEmailAndPassword(auth, email_sig, pass_sig); 
         await signInWithEmailAndPassword(auth, email_sig, pass_sig);
-        window.location.replace("analytics_vi.html");
+        if (checkbox.checked) {
+        localStorage.setItem('user', JSON.stringify(userCredential.user));
+        } else {
+            localStorage.clear();
+        }
+        window.location.replace("analytics_en.html");
     } catch (error) {
-        alert("Đăng nhập thất bại: " + error.message);
+        alert("Đăng ký thất bại: " + error.message);
     }
 };
 
 checkLoggedIn().then((isLoggedIn) => {
     if (isLoggedIn) {
-        window.location.replace("analytics_vi.html");
+        window.location.replace("analytics_en.html");
     }
 });
+
+const user = JSON.parse(localStorage.getItem('user'));
+
+if (user) {
+  try {
+    auth.signInWithEmailAndPassword(user.email, user.password)
+  }
+  catch(error){
+      console.error(error);
+    };
+}
+
+if (user === null) {
+    try {
+        auth.signOut();
+    }
+    catch(error){
+        console.error(error);
+      };
+  }
 
 registerForm.addEventListener('submit', signup);
 loginForm.addEventListener('submit', login);
