@@ -1,13 +1,50 @@
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB7WrNTgddUG1kUWpJEvi2wQ1rkZ7qPWzw",
+  authDomain: "tt-iot-c55f1.firebaseapp.com",
+  databaseURL: "https://tt-iot-c55f1-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "tt-iot-c55f1",
+  storageBucket: "tt-iot-c55f1.appspot.com",
+  messagingSenderId: "704768397878",
+  appId: "1:704768397878:web:f913101b2eddb9c65d3e97",
+  measurementId: "G-L2BHB77QF5"
+};
+
+
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
+
+const auth = getAuth(app);
+
+let encodedEmail;
+
+const waitForEncodedEmail = async () => {
+  return new Promise((resolve) => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        encodedEmail = encodeURIComponent(user.email.replace(/[.@]/g, '_'));
+      } else {
+        console.log("No user is logged in.");
+      }
+      resolve(encodedEmail);
+    });
+  });
+};
+
+
 const apiKey = "2bb5c13c302737b658da7f4907b1a168";
 const apiUrl = "https://api.openweathermap.org/data/2.5/weather?lang=vi&units=metric&q=";
 
 const searchBox = document.querySelector(".search input");
 const weatherIcon = document.querySelector(".weather-icon");
 
-let lct = JSON.parse(localStorage.getItem("lct")) || "thu duc";
+let lct = "thu duc";
 let intervalId;
 
-const intervalTime = 6 * 60 * 1000; // 6 phút ~ 10 lần/h
+const intervalTime = 6 * 60 * 1000; // 10 phút
 
 async function checkWeather(city) {
   try {
@@ -24,27 +61,33 @@ async function checkWeather(city) {
       document.querySelector(".w_humi").innerHTML = data.main.humidity + "%";
       document.querySelector(".w_wind").innerHTML = data.wind.speed + " km/h";
       weatherIcon.src = `img_weather/${data.weather[0].icon}.svg`;
-
       document.querySelector(".weather").style.display = "block";
       document.querySelector(".error").style.display = "none";
     }
   } catch (error) {
     console.log(error);
   }
-  console.log(localStorage.getItem('lct'));
 }
 
-searchBox.addEventListener("keydown", (event) => {
-  if (event.keyCode === 13) {
-    checkWeather(searchBox.value);
-    localStorage.setItem("lct", JSON.stringify(searchBox.value));
-    searchBox.value = "";
-    lct = JSON.parse(localStorage.getItem("lct")) || "thu duc";
-  }
+waitForEncodedEmail().then((encodedEmail) => {
+  searchBox.addEventListener("keydown", (event) => {
+    if (event.keyCode === 13) {
+      checkWeather(searchBox.value);
+      set(ref(database, `${encodedEmail}/pre_lct`), searchBox.value);
+      searchBox.value = "";
+    }
+  });
 });
 
-checkWeather(lct);
-intervalId = setInterval(() => {
-  checkWeather(lct);
-}, intervalTime);
+waitForEncodedEmail().then((encodedEmail) => {
+  const humiRef = ref(database, `${encodedEmail}/pre_lct`);
+  onValue(humiRef, (snapshot) => {
+    lct = snapshot.val() || "thu duc";
+    checkWeather(lct);
+    intervalId = setInterval(() => {
+      checkWeather(lct);
+    }, intervalTime);
+    console.log(lct);
+  });
+});
 
