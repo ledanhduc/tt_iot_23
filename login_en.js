@@ -47,6 +47,7 @@ const signup = async (e) => {
         alert("Sign up successful");
         const encodedEmail = encodeURIComponent(email_reg.replace(/[.@]/g, '_'));
         await set(ref(db, `${encodedEmail}`), iddevice);
+        console.log("Lưu thông tin đăng ký vào Firebase thành công");
 
         if (await checkLoggedIn()) {
             window.location.replace("login_en.html");
@@ -63,6 +64,7 @@ const login = async (e) => {
 
     try {
         userCredential = await signInWithEmailAndPassword(auth, email_sig, pass_sig); 
+
         await signInWithEmailAndPassword(auth, email_sig, pass_sig);
         if (checkbox.checked) {
         localStorage.setItem('user', JSON.stringify(userCredential.user));
@@ -86,6 +88,7 @@ const user = JSON.parse(localStorage.getItem('user'));
 if (user) {
   try {
     auth.signInWithEmailAndPassword(user.email, user.password)
+
   }
   catch(error){
       console.error(error);
