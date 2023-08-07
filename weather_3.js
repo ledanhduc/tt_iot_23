@@ -39,6 +39,7 @@ const apiKey = "2bb5c13c302737b658da7f4907b1a168";
 const apiUrl = "https://api.openweathermap.org/data/2.5/weather?lang=vi&units=metric&q=";
 
 const searchBox = document.querySelector(".search input");
+const searchBtn = document.querySelector(".search button");
 const weatherIcon = document.querySelector(".weather-icon");
 
 let lct = "thu duc";
