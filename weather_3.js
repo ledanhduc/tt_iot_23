@@ -57,7 +57,7 @@ async function checkWeather(city) {
       const data = await response.json();
 
       document.querySelector(".city").innerHTML = data.name;
-      document.querySelector(".w_temp").innerHTML = Math.round(data.main.temp) + "°c"
+      document.querySelector(".w_temp").innerHTML = Math.round(data.main.temp) + "°C"
       document.querySelector(".w_humi").innerHTML = data.main.humidity + "%";
       document.querySelector(".w_wind").innerHTML = data.wind.speed + " km/h";
       weatherIcon.src = `img_weather/${data.weather[0].icon}.svg`;
