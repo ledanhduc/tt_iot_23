@@ -1,6 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
 import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyB7WrNTgddUG1kUWpJEvi2wQ1rkZ7qPWzw",
   authDomain: "tt-iot-c55f1.firebaseapp.com",
@@ -14,6 +15,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
+const auth = getAuth(app);
 
 function toggleLamp(toggleElem, stateElem, path) {
   let parentNode = toggleElem.parentNode;
@@ -98,7 +100,7 @@ airConditioners_fb.forEach(function(ac) {
     }
   });
 });
-const auth = getAuth();
+
 onAuthStateChanged(auth, (user) => {
   if (user) {
     const uid = user.uid;
