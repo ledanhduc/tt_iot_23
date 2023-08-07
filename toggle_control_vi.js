@@ -98,3 +98,22 @@ airConditioners_fb.forEach(function(ac) {
     }
   });
 });
+const auth = getAuth();
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    const uid = user.uid;
+    
+  } else {
+    window.location.replace("login_en.html")
+  }
+});
+
+var userRead =  sessionStorage.getItem('userses') || localStorage.getItem('user');
+if (userRead === null) {
+    try {
+        auth.signOut();
+    }
+    catch(error){
+        console.error(error);
+      };
+}
