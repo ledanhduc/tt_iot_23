@@ -70,6 +70,41 @@ async function checkWeather(city) {
 }
 
 waitForEncodedEmail().then((encodedEmail) => {
+  searchBtn.addEventListener("click", () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(getPosition, showError);
+    } else {
+      set(ref(database, `${encodedEmail}/pre_lct`), "thu duc");
+    }
+  
+    function getPosition(position) {
+      let lat = position.coords.latitude;
+      let lon = position.coords.longitude;
+      fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}`)
+        .then(response => response.json())
+        .then(data => {
+          set(ref(database, `${encodedEmail}/pre_lct`), data.name);
+        });
+    }
+  
+    function showError(error) {
+      switch (error.code) {
+        case error.PERMISSION_DENIED:
+          set(ref(database, `${encodedEmail}/pre_lct`), "thu duc");
+          break;
+        case error.POSITION_UNAVAILABLE:
+          set(ref(database, `${encodedEmail}/pre_lct`), "thu duc");
+          break;
+        case error.TIMEOUT:
+          set(ref(database, `${encodedEmail}/pre_lct`), "thu duc");
+          break;
+        case error.UNKNOWN_ERROR:
+          set(ref(database, `${encodedEmail}/pre_lct`), "thu duc");
+          break;
+      }
+    }
+  });
+  
   searchBox.addEventListener("keydown", (event) => {
     if (event.keyCode === 13) {
       checkWeather(searchBox.value);
