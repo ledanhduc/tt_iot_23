@@ -9,11 +9,12 @@
     --color-white: #fff;
     --color-info-dark: #7d8da1;
     --color-dark: #000;
-    --color-dark_1: #000;
+    --color-dark1: #555;
     --color-light: rgba(132, 139, 200, 0.18);
     --color-dark-variant: #677483;
     --color-background: #f6f6f9;
     --color-gardient: linear-gradient(135deg, #00feba, #5b548a);
+    --color-gardient1: linear-gradient(135deg, #665bab, #118d558b);
     
     --card-border-radius: 2rem;
     --border-radius-1: 0.4rem;
@@ -29,10 +30,13 @@
     --color-background: #181a1e;
     --color-white: #202528;
     --color-dark: #edeffd;
+    --color-dark1:#ffffffa2;
     --color-dark-variant: #a3bdcc;
     --color-light: rgba(0, 0, 0, 0.4);
     --box-shadow: 0 2rem 3rem var(--color-light);
     --box-shadow: 0 2rem 3rem var(--color-light);
+    --color-gardient: linear-gradient(135deg, #665bab, #118d558b);
+    --color-gardient1: linear-gradient(135deg, #00feba, #5b548a);
 }
 
 *{
@@ -583,30 +587,63 @@ main .recent-checkin a{
     border-radius: var(--card-border-radius);
     box-shadow: var(--box-shadow);
     cursor: pointer;
-    transition: all 0.3s ease;
 }
-
 .right-section .weather-in4:hover{
     box-shadow: none;
 }
 
+.right-section .search{
+    width: 100%;
+    height: 100%;
+    justify-content: space-between;
+    display: inline-flex;   
+    align-items: center; 
+/*     margin-bottom: 15px; */
+}
 .right-section .search input{
     border: 0;
     outline: 0;
-    background: #ebfffc;
-    color: #555;
+    background: var(--color-white);
+    color: var(--color-dark);
     padding: 10px 25px;
     height: 60px;
     width: 100%;
     border-radius: 30px;
     flex: 1;
-
+    margin-right: 16px;
     font-size: 18px;
 }
+.right-section .search input::placeholder{
+    color: var(--color-dark1);
+}
+.right-section .search button{
+    border: 0;
+    outline: 0;
+    background: var(--color-white);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    align-items: center;
+    transition: 0.5s ease;
+}
+.right-section .search button:hover{
+    background: rgb(100, 154, 255);
+}
+.right-section .search button svg{
+    width: 40x;
+    height: 40px;
+    fill: var(--color-dark);
+    transition: 0.5s ease;
+}
+.right-section .search button svg:hover{
+    fill: var(--color-white);
+}
+
 .right-section .weather-icon{
     width: 150px;
     height: 150px;
-    margin-top: -10px;
+/*     margin-top: -10px; */
     text-align: center;
     text-align: center;
     display: inline-block;
@@ -621,14 +658,14 @@ main .recent-checkin a{
 .right-section .weather h2{
     font-size: 45px;
     font-weight: 400;
-/*     margin-top: -10px;  */
+    margin-top: -5px; 
 }
 .right-section .details{
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 20px;
-    margin-top: 50px;
+    margin-top: 30px;
 }
 .right-section .col{
     display: flex;
