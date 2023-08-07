@@ -598,7 +598,7 @@ main .recent-checkin a{
     justify-content: space-between;
     display: inline-flex;   
     align-items: center; 
-/*     margin-bottom: 15px; */
+    margin-bottom: 10px;
 }
 .right-section .search input{
     border: 0;
