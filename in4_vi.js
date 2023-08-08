@@ -27,6 +27,16 @@ onValue(tempRef, (snapshot) => {
   document.getElementById('num_temp').style.setProperty('--num_temp', temp);
 });
 
+const tot_preRef = ref(database, 'c302/pre_total');
+
+onValue(tot_preRef, (snapshot) => {
+  const tot_pre = snapshot.val();
+  document.getElementById('tot_pre').textContent = tot_pre;
+  document.getElementById('num_pre').style.setProperty('--tot_pre', tot_pre);
+  document.getElementById('num_pre').style.setProperty('--dot_pre', `${360 / tot_pre}deg`);
+
+});
+
 const preRef = ref(database, 'c302/pre');
 
 onValue(preRef, (snapshot) => {
