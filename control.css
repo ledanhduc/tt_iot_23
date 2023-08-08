@@ -8,7 +8,7 @@
     --color-warning: #F7D060;
     --color-white: #fff;
     --color-info-dark: #7d8da1;
-    --color-gardient: linear-gradient(135deg, #00feba, #5b548a);
+    --color-gardient: linear-gradient(135deg, #00feba 0%, #5099c4 70%);
     /* --color-dark: #363949; */
     --color-dark: #000;
     --color-dark_1: #000;
