@@ -13,7 +13,7 @@
     --color-light: rgba(132, 139, 200, 0.18);
     --color-dark-variant: #677483;
     --color-background: #f6f6f9;
-    --color-gardient: linear-gradient(135deg, #00feba, #5b548a);
+    --color-gardient: linear-gradient(135deg, #00feba 0%, #5099c4 70%);
     --color-gardient1: linear-gradient(135deg, #665bab, #118d558b);
     
     --card-border-radius: 2rem;
@@ -265,6 +265,12 @@ main .analyse > div .status{
     justify-content: space-between;
 }
 
+main .analyse > div .status{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
 main .analyse h3{
     margin-left: 0.6rem;
     font-size: 1rem;
@@ -279,7 +285,6 @@ main .analyse .temp_cir{
     width: 92px;
     height: 92px;
     border-radius: 50%;
-    transform: translate(10px, 10px);
 }
 
 main .analyse .temp_cir svg{
@@ -287,7 +292,6 @@ main .analyse .temp_cir svg{
     width: 92px;
     height: 92px;
     transform: rotate(275deg);
-    margin-top: -5px;
 }
 
 main .analyse .temp_cir svg circle{
@@ -295,7 +299,6 @@ main .analyse .temp_cir svg circle{
     height: 100%;
     fill: transparent;
     stroke-width: 4;
-    transform: translate(3px, 7.8px);
 }
 
 main .analyse .temp_cir svg circle:nth-child(2){
@@ -316,7 +319,7 @@ main .analyse .temp_cir svg circle:nth-child(2){
 main .analyse .temp_cir svg circle:nth-child(2).pre {
     stroke: var(--clr-pre);
     stroke-dasharray: 239;
-    stroke-dashoffset: calc(239 - (239 * var(--num_pre)) / 100);
+    stroke-dashoffset: calc(239 - (239 * var(--num_pre)) / var(--tot_pre));
 }
 main .analyse .temp_cir svg circle:nth-child(2).temp {
     stroke: var(--clr-temp);
@@ -360,7 +363,7 @@ main .analyse .temp_cir svg circle:nth-child(2).humi {
         transform: rotate(0deg);
     }    
     100%{
-        transform: rotate(calc(3.6deg * var(--num_pre)));
+        transform: rotate(calc(var(--dot_pre)* var(--num_pre)));
     }
 }
 @keyframes animateDot2{
@@ -374,7 +377,6 @@ main .analyse .temp_cir svg circle:nth-child(2).humi {
 .dot::before{
     content: '';
     position: absolute;
-    top: -0.5px;
     left: 50%;
     transform: translateX(-50%);
     width: 10px;
@@ -388,7 +390,6 @@ main .analyse .temp_cir svg circle:nth-child(2).humi {
 .dot1::before{
     content: '';
     position: absolute;
-    top: -0.5px;
     left: 50%;
     transform: translateX(-50%);
     width: 10px;
@@ -402,7 +403,6 @@ main .analyse .temp_cir svg circle:nth-child(2).humi {
 .dot2::before{
     content: '';
     position: absolute;
-    top: -0.5px;
     left: 50%;
     transform: translateX(-50%);
     width: 10px;
@@ -417,7 +417,6 @@ main .analyse .temp_cir svg circle:nth-child(2).humi {
 main .analyse .temp_cir .percentage{
     position: absolute;
     top: 1px;
-    left: -2px;
     display: flex;
     align-items: center;
     justify-content: center;
