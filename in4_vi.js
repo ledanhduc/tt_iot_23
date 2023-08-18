@@ -56,15 +56,17 @@ onValue(humiRef, (snapshot) => {
   document.getElementById('num_humi').style.setProperty('--num_humi', humi);
 });
 
+let encodedEmail;
 const nameuser1 = document.getElementById("nameuser1");
 const avtUser1 = document.getElementById("avt_user1");
 onAuthStateChanged(auth, (user) => {  
   if (user) {
-    onValue(databaseRef(database, `${encodedEmail}/avt_img`), (snapshot) => {
-      avtUser.src = snapshot.val();
+    encodedEmail = encodeURIComponent(user.email.replace(/[.@]/g, '_'));
+    onValue(ref(database, `${encodedEmail}/avt_img`), (snapshot) => {
       avtUser1.src = snapshot.val();
     });
     nameuser1.innerHTML = user.displayName;
+    console.log(user.displayName);
   }
 });
 
