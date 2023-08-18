@@ -62,9 +62,6 @@ const avtUser1 = document.getElementById("avt_user1");
 onAuthStateChanged(auth, (user) => {  
   if (user) {
     encodedEmail = encodeURIComponent(user.email.replace(/[.@]/g, '_'));
-    // onValue(ref(database, `${encodedEmail}/avt_img`), (snapshot) => {
-    //   avtUser1.src = snapshot.val();
-    // });
     onValue(ref(database, `${encodedEmail}/avt_img`), (snapshot) => {
       avtUser1.src = snapshot.val();
     });
@@ -73,7 +70,6 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-const auth = getAuth();
 onAuthStateChanged(auth, (user) => {
   if (user) {
     const uid = user.uid;
