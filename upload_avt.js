@@ -1,8 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
 import { getDatabase, ref as databaseRef, set, onValue } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-database.js";
 import { getAuth, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
-import { getStorage, ref as storageRef, uploadBytes } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-storage.js"; 
-// import { getStorage} from "https://www.gstatic.com/firebasejs/10.0.0/firebase-storage.js"; 
+
+
 
 const firebaseConfig = {
     apiKey: "AIzaSyB7WrNTgddUG1kUWpJEvi2wQ1rkZ7qPWzw",
@@ -19,129 +19,57 @@ const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 const auth = getAuth(app);
 const user = auth.currentUser;
-const storage = getStorage(app);
-
 
 let encodedEmail;
-// let email;
 
-// onAuthStateChanged(auth, (user) => {
-//   if (user !== null) {
-//     encodedEmail = encodeURIComponent(user.email.replace(/[.@]/g, '_'));
-//     console.log(email);
-//   } else {
-//     console.log('null');
-//   }
-// });
-
-// const uploadBtn = document.getElementById("uploadbtn");
 const fileInput = document.getElementById("file");
 const avtUser = document.getElementById("avt_user");
 const avtUser1 = document.getElementById("avt_user1");
 
-// const input = document.querySelector("input[type='file']");
+const input = document.querySelector("input[type='file']");
 
-// input.addEventListener("click", () => {
-//   fileInput.click();
-// });
-
-// fileInput.addEventListener("change", () => {
-//   const file = fileInput.files[0];
-
-//   if (!file) return;
-
-//   const reader = new FileReader();
-
-//   reader.onload = (e) => {
-//     const image = new Image();
-
-//     image.onload = () => {
-//       let width = 260;
-//       let height = Math.floor(width / (image.width / image.height));
-
-//       if (image.width <= width) {
-//         width = image.width;
-//         height = image.height;
-//       }
-
-//       const canvas = document.createElement("canvas");
-//       const ctx = canvas.getContext("2d");
-
-//       canvas.width = width;
-//       canvas.height = height;
-
-//       ctx.drawImage(image, 0, 0, width, height);
-
-//     //   avtUser.src = canvas.toDataURL("image/jpeg");
-//       avtUser.src = canvas.toDataURL("image/png");
-//       // avtUser.src = canvas
-//       avtUser1.src = canvas.toDataURL("image/png");
-//     };
-
-//     image.src = e.target.result;
-//   };
-
-//   reader.readAsDataURL(file);
-// });
-
-// const input = document.querySelector("input[type='file']");
-
-// const input = document.querySelector("input[type='file']");
-// let image;
-// input.addEventListener("click", () => {
-//   fileInput.click();
-// });
-
-// fileInput.addEventListener("change", () => {
-//   const file = fileInput.files[0];
-
-//   if (!file) return;
-
-//   const reader = new FileReader();
-
-//   reader.onload = (e) => {
-//     image = new Image();
-
-//     image.onload = () => {
-//       avtUser.src = e.target.result;
-//       avtUser1.src = e.target.result;
-//     };
-
-//     image.src = e.target.result;
-//   };
-  
-//   reader.readAsDataURL(file);
-// });
-
-// fileInput.addEventListener("change", () => {
-//   const file = fileInput.files[0];
-
-//   if (!file) return;
-
-//   const fileRef = storage.ref().child(file.name);
-
-//   fileRef.put(file)
-//     .then((snapshot) => {
-//       console.log("Image uploaded successfully:", snapshot);
-//       // Thực hiện các thao tác khác với URL hoặc thông tin chi tiết của ảnh đã tải lên
-//     })
-//     .catch((error) => {
-//       console.error("Error uploading image:", error);
-//       // Xử lý lỗi
-//     });
-// });
+input.addEventListener("click", () => {
+  fileInput.click();
+});
 
 fileInput.addEventListener("change", () => {
   const file = fileInput.files[0];
 
   if (!file) return;
 
-  const upRef = storageRef(storage, file.name);
-  uploadBytes(upRef, file).then((snapshot) => {
-    console.log('Uploaded a blob or file!');
-  });
-});
+  const reader = new FileReader();
 
+  reader.onload = (e) => {
+    const image = new Image();
+
+    image.onload = () => {
+      let width = 260;
+      let height = Math.floor(width / (image.width / image.height));
+
+      if (image.width <= width) {
+        width = image.width;
+        height = image.height;
+      }
+
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+
+      canvas.width = width;
+      canvas.height = height;
+
+      ctx.drawImage(image, 0, 0, width, height);
+      avtUser.src = canvas.toDataURL("image/png");
+      avtUser1.src = canvas.toDataURL("image/png");
+      set(databaseRef(database, `${encodedEmail}/avt_img`), canvas.toDataURL("image/png"));
+
+
+    };
+
+    image.src = e.target.result;
+  };
+
+  reader.readAsDataURL(file);
+});
 
 const uploadin4btn = document.getElementById("upin4");
 const nameuser = document.getElementById("nameuser");
@@ -185,44 +113,13 @@ onAuthStateChanged(auth, (user) => {
     onValue(databaseRef(database, `${encodedEmail}/phnumber`), (snapshot) => {
       phnumber.value = snapshot.val();
     });
+    onValue(databaseRef(database, `${encodedEmail}/avt_img`), (snapshot) => {
+      avtUser.src = snapshot.val();
+      avtUser1.src = snapshot.val();
+    });
     nameuser.value = user.displayName;
     nameuser1.innerHTML = user.displayName;
     emaildisp.value = user.email;
   }
 });
-onValue(databaseRef(database, `${encodedEmail}/dob`), (snapshot) => {
-  dob.value = snapshot.val();
-});
-onValue(databaseRef(database, `${encodedEmail}/phnumber`), (snapshot) => {
-  phnumber.value = snapshot.val();
-});
-onAuthStateChanged(auth, (user) => {
-  if (user !== null) {
-    user.providerData.forEach((profile) => {
-      console.log("Sign-in provider: " + profile.providerId);
-      console.log("  Provider-specific UID: " + profile.uid);
-      console.log("  Name: " + profile.displayName);
-      console.log("  Email: " + profile.email);
-      console.log("  Photo URL: " + profile.photoURL);
-    });
-  }
-});
 
-onAuthStateChanged(auth, (user) => {
-  if (user) {
-    const uid = user.uid;
-    
-  } else {
-    window.location.replace("login_en.html")
-  }
-});
-
-var userRead =  sessionStorage.getItem('userses') || localStorage.getItem('user');
-if (userRead === null) {
-    try {
-        auth.signOut();
-    }
-    catch(error){
-        console.error(error);
-      };
-}
