@@ -18,7 +18,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 const auth = getAuth(app);
-const user = auth.currentUser;
 
 const tempRef = ref(database, 'c302/temp');
 
@@ -57,15 +56,20 @@ onValue(humiRef, (snapshot) => {
   document.getElementById('num_humi').style.setProperty('--num_humi', humi);
 });
 
+let encodedEmail;
 const nameuser1 = document.getElementById("nameuser1");
 const avtUser1 = document.getElementById("avt_user1");
 onAuthStateChanged(auth, (user) => {  
   if (user) {
+    encodedEmail = encodeURIComponent(user.email.replace(/[.@]/g, '_'));
+    // onValue(ref(database, `${encodedEmail}/avt_img`), (snapshot) => {
+    //   avtUser1.src = snapshot.val();
+    // });
     onValue(ref(database, `${encodedEmail}/avt_img`), (snapshot) => {
-      avtUser.src = snapshot.val();
       avtUser1.src = snapshot.val();
     });
     nameuser1.innerHTML = user.displayName;
+    console.log(user.displayName);
   }
 });
 
