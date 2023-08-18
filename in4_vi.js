@@ -70,7 +70,6 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-const auth = getAuth();
 onAuthStateChanged(auth, (user) => {
   if (user) {
     const uid = user.uid;
