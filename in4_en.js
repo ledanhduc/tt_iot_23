@@ -18,6 +18,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 const auth = getAuth(app);
+const user = auth.currentUser;
 
 const tempRef = ref(database, 'c302/temp');
 
@@ -60,7 +61,7 @@ const nameuser1 = document.getElementById("nameuser1");
 const avtUser1 = document.getElementById("avt_user1");
 onAuthStateChanged(auth, (user) => {  
   if (user) {
-    onValue(databaseRef(database, `${encodedEmail}/avt_img`), (snapshot) => {
+    onValue(ref(database, `${encodedEmail}/avt_img`), (snapshot) => {
       avtUser.src = snapshot.val();
       avtUser1.src = snapshot.val();
     });
