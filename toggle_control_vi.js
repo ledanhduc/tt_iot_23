@@ -101,6 +101,20 @@ airConditioners_fb.forEach(function(ac) {
   });
 });
 
+let encodedEmail;
+const nameuser1 = document.getElementById("nameuser1");
+const avtUser1 = document.getElementById("avt_user1");
+onAuthStateChanged(auth, (user) => {  
+  if (user) {
+    encodedEmail = encodeURIComponent(user.email.replace(/[.@]/g, '_'));
+    onValue(ref(database, `${encodedEmail}/avt_img`), (snapshot) => {
+      avtUser1.src = snapshot.val();
+    });
+    nameuser1.innerHTML = user.displayName;
+    console.log(user.displayName);
+  }
+});
+
 onAuthStateChanged(auth, (user) => {
   if (user) {
     const uid = user.uid;
