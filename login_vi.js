@@ -19,76 +19,89 @@ const auth = getAuth(app);
 
 const registerForm = document.querySelector('.register form');
 const loginForm = document.querySelector('.login form');
-const checkbox = document.getElementById('rmb_ac');
 
-const checkLoggedIn = async () => {
-  const user = await new Promise((resolve) => {
-    onAuthStateChanged(auth, (user) => resolve(user));
-  });
-  return Boolean(user);
+const checkLoggedIn = () => {
+    return new Promise((resolve, reject) => {
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                resolve(true);
+            } else {
+                resolve(false);
+            }
+        });
+    });
 };
 
+const checkbox = document.getElementById('rmb_ac');
+let userCredential; 
+
 const signup = async (e) => {
-  e.preventDefault();
-  const iddevice = document.getElementById("iddevice").value;
-  const email_reg = document.getElementById("email_reg").value;
-  const pass_reg = document.getElementById("pass_reg").value;
+    e.preventDefault();
+    const iddevice = document.getElementById("iddevice").value;
+    const email_reg = document.getElementById("email_reg").value;
+    const pass_reg = document.getElementById("pass_reg").value;
 
-  try {
-    const userCredential = await createUserWithEmailAndPassword(auth, email_reg, pass_reg);
-    const user = userCredential.user;
-    alert("Đăng ký thành công");
-    const encodedEmail = encodeURIComponent(email_reg.replace(/[.@]/g, '_'));
-    await set(ref(db, `${encodedEmail}`), iddevice);
-    // console.log("Lưu thông tin đăng ký vào Firebase thành công");
-
-    if (await checkLoggedIn()) {
-      window.location.replace("login_vi.html");
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email_reg, pass_reg);
+        const user = userCredential.user;
+        alert("Đăng ký thành công !");
+        const encodedEmail = encodeURIComponent(email_reg.replace(/[.@]/g, '_'));
+        await set(ref(db, `${encodedEmail}`), iddevice);
+        if (await checkLoggedIn()) {
+            window.location.replace("login_vi.html");
+        }
+    } catch (error) {
+        alert("Đăng ký thất bại: " + error.message);
     }
-  } catch (error) {
-    alert("Đăng ký thất bại: " + error.message);
-  }
 };
 
 const login = async (e) => {
-  e.preventDefault();
-  const email_sig = document.getElementById("email_sig").value;
-  const pass_sig = document.getElementById("pass_sig").value;
+    e.preventDefault();
+    const email_sig = document.getElementById("email_sig").value;
+    const pass_sig = document.getElementById("pass_sig").value;
 
-  try {
-    const userCredential = await signInWithEmailAndPassword(auth, email_sig, pass_sig);
-    if (checkbox.checked) {
-      localStorage.setItem('user', JSON.stringify(userCredential.user));
-    } else {
-      localStorage.clear();
+    try {
+        userCredential = await signInWithEmailAndPassword(auth, email_sig, pass_sig); 
+
+        await signInWithEmailAndPassword(auth, email_sig, pass_sig);
+        sessionStorage.setItem('userses', JSON.stringify(userCredential.user));
+        if (checkbox.checked) {
+        localStorage.setItem('user', JSON.stringify(userCredential.user));
+        } else {
+            localStorage.clear();
+        }
+        window.location.replace("analytics_vi.html");
+    } catch (error) {
+        alert("Đăng nhập thất bại: " + error.message);
     }
-    window.location.replace("analytics_vi.html");
-  } catch (error) {
-    alert("Đăng nhập thất bại: " + error.message);
-  }
 };
 
 checkLoggedIn().then((isLoggedIn) => {
-  if (isLoggedIn) {
-    window.location.replace("analytics_vi.html");
-  }
+    if (isLoggedIn) {
+        window.location.replace("analytics_vi.html");
+    }
 });
 
 const user = JSON.parse(localStorage.getItem('user'));
 
 if (user) {
   try {
-    await signInWithEmailAndPassword(auth, user.email, user.password);
-  } catch (error) {
-    console.error(error);
+    auth.signInWithEmailAndPassword(user.email, user.password)
+
   }
-} else {
-  try {
-    await auth.signOut();
-  } catch (error) {
-    console.error(error);
-  }
+  catch(error){
+      console.error(error);
+    };
 }
+
+if (user === null) {
+    try {
+        auth.signOut();
+    }
+    catch(error){
+        console.error(error);
+      };
+  }
 
 registerForm.addEventListener('submit', signup);
 loginForm.addEventListener('submit', login);
