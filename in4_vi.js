@@ -75,7 +75,7 @@ onAuthStateChanged(auth, (user) => {
     const uid = user.uid;
     
   } else {
-    window.location.replace("login_en.html")
+    window.location.replace("login_vi.html")
   }
 });
 
