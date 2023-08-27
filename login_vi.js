@@ -77,7 +77,7 @@ const login = async (e) => {
         
         const encodedEmail = encodeURIComponent(email_sig.replace(/[.@]/g, '_'));
         const timestamp = new Date().toLocaleString().replace(/[/]/g, '_');
-        await set(ref(db, `${encodedEmail}/${timestamp_}`), ipAddress);
+        await set(ref(db, `${encodedEmail}/${timestamp}`), ipAddress);
         
         sessionStorage.setItem('userses', JSON.stringify(userCredential.user));
         if (checkbox.checked) {
