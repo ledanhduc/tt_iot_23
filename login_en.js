@@ -19,31 +19,32 @@ const auth = getAuth(app);
 
 const registerForm = document.querySelector('.register form');
 const loginForm = document.querySelector('.login form');
+const checkbox = document.getElementById('rmb_ac');
+const iddeviceInput = document.getElementById("iddevice");
+const emailRegInput = document.getElementById("email_reg");
+const passRegInput = document.getElementById("pass_reg");
+const emailSigInput = document.getElementById("email_sig");
+const passSigInput = document.getElementById("pass_sig");
 
-const checkLoggedIn = () => {
-    return new Promise((resolve, reject) => {
+const checkLoggedIn = async () => {
+    const user = await new Promise((resolve, reject) => {
         onAuthStateChanged(auth, (user) => {
-            if (user) {
-                resolve(true);
-            } else {
-                resolve(false);
-            }
+            resolve(user);
         });
     });
-};
 
-const checkbox = document.getElementById('rmb_ac');
-let userCredential; 
+    return !!user;
+};
 
 const signup = async (e) => {
     e.preventDefault();
-    const iddevice = document.getElementById("iddevice").value;
-    const email_reg = document.getElementById("email_reg").value;
-    const pass_reg = document.getElementById("pass_reg").value;
+    const iddevice = iddeviceInput.value;
+    const email_reg = emailRegInput.value;
+    const pass_reg = passRegInput.value;
 
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email_reg, pass_reg);
-        const user = userCredential.user;
+
         alert("Sign up successful");
         const encodedEmail = encodeURIComponent(email_reg.replace(/[.@]/g, '_'));
         await set(ref(db, `${encodedEmail}`), iddevice);
@@ -57,53 +58,71 @@ const signup = async (e) => {
     }
 };
 
+let ipAddress;
+
+const getIPAddress = async () => {
+  try {
+    const response = await fetch("https://api.ipify.org/?format=json");
+    const data = await response.json();
+    ipAddress = data.ip;
+  } catch (error) {
+    console.error("Failed to get IP address:", error);
+  }
+};
+
 const login = async (e) => {
     e.preventDefault();
-    const email_sig = document.getElementById("email_sig").value;
-    const pass_sig = document.getElementById("pass_sig").value;
-
+    const emailSig = emailSigInput.value;
+    const passSig = passSigInput.value;
+  
     try {
-        userCredential = await signInWithEmailAndPassword(auth, email_sig, pass_sig); 
+      const userCredential = await signInWithEmailAndPassword(auth, emailSig, passSig);
+      const encodedEmail = encodeURIComponent(emailSig.replace(/[.@]/g, '_'));
+      const user = userCredential.user;
+      const timestamp = new Date().toLocaleString().replace(/[/]/g, '_');
+      await set(ref(db, `${encodedEmail}/${timestamp}`), ipAddress);
 
-        await signInWithEmailAndPassword(auth, email_sig, pass_sig);
-        sessionStorage.setItem('userses', JSON.stringify(userCredential.user));
-        if (checkbox.checked) {
-        localStorage.setItem('user', JSON.stringify(userCredential.user));
-        } else {
-            localStorage.clear();
-        }
-        window.location.replace("analytics_en.html");
+      sessionStorage.setItem('userses', JSON.stringify(user));
+  
+      if (checkbox.checked) {
+        localStorage.setItem('user', JSON.stringify(user));
+      } else {
+        localStorage.clear();
+      }
+  
+      window.location.replace("analytics_en.html");
     } catch (error) {
-        alert("Sign in failed: " + error.message);
+      alert("Sign in failed: " + error.message);
     }
+};
+
+getIPAddress();
+
+const redirectUser = (page) => {
+    window.location.replace(page);
 };
 
 checkLoggedIn().then((isLoggedIn) => {
     if (isLoggedIn) {
-        window.location.replace("analytics_en.html");
+        redirectUser("analytics_en.html");
     }
 });
 
 const user = JSON.parse(localStorage.getItem('user'));
 
 if (user) {
-  try {
-    auth.signInWithEmailAndPassword(user.email, user.password)
-
-  }
-  catch(error){
-      console.error(error);
-    };
-}
-
-if (user === null) {
+    try {
+        auth.signInWithEmailAndPassword(user.email, user.password);
+    } catch (error) {
+        console.error(error);
+    }
+} else {
     try {
         auth.signOut();
-    }
-    catch(error){
+    } catch (error) {
         console.error(error);
-      };
-  }
+    }
+}
 
 registerForm.addEventListener('submit', signup);
 loginForm.addEventListener('submit', login);
