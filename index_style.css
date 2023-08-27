@@ -63,7 +63,7 @@ nav ul li{
         z-index: 0;
     }    
     nav ul li{
-    background-color: none;
+    background-color: rgba(4, 9, 30, 0);
     }
 }
 
