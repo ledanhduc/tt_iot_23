@@ -55,15 +55,30 @@ const signup = async (e) => {
     }
 };
 
+let ipAddress;
+
+const getIPAddress = async () => {
+  try {
+    const response = await fetch("https://api.ipify.org/?format=json");
+    const data = await response.json();
+    ipAddress = data.ip;
+  } catch (error) {
+    console.error("Failed to get IP address:", error);
+  }
+};
+
 const login = async (e) => {
     e.preventDefault();
     const email_sig = document.getElementById("email_sig").value;
     const pass_sig = document.getElementById("pass_sig").value;
 
     try {
-        userCredential = await signInWithEmailAndPassword(auth, email_sig, pass_sig); 
-
-        await signInWithEmailAndPassword(auth, email_sig, pass_sig);
+        userCredential = await signInWithEmailAndPassword(auth, email_sig, pass_sig);
+        
+        const encodedEmail = encodeURIComponent(email_sig.replace(/[.@]/g, '_'));
+        const timestamp = new Date().toLocaleString().replace(/[/]/g, '_');
+        await set(ref(db, `${encodedEmail}/${timestamp_}`), ipAddress);
+        
         sessionStorage.setItem('userses', JSON.stringify(userCredential.user));
         if (checkbox.checked) {
         localStorage.setItem('user', JSON.stringify(userCredential.user));
