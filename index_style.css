@@ -62,6 +62,9 @@ nav ul li{
     #logo{
         z-index: 0;
     }    
+    nav ul li{
+    background-color: none;
+    }
 }
 
 nav img{
