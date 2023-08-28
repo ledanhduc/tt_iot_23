@@ -91,6 +91,8 @@ const login = async (e) => {
     }
 };
 
+getIPAddress();
+
 checkLoggedIn().then((isLoggedIn) => {
     if (isLoggedIn) {
         window.location.replace("analytics_vi.html");
