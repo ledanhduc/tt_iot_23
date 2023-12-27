@@ -80,6 +80,7 @@ lamps_fb.forEach(function(lamp_fb) {
       lamp_fb.toggle.parentNode.classList.remove('active');
       lamp_fb.state.innerHTML = "OFF";
       lamp_fb.state.style.color = "rgb(227, 4, 90)";
+      set(ref(database, `${value}/st_timer`), false); 
     }
   });
 });
